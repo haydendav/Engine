@@ -1,5 +1,7 @@
 package com.chess.pieces;
 
+import java.util.List;
+
 public class Pawn extends Piece {
     private String color;
     private int x;
@@ -39,5 +41,16 @@ public class Pawn extends Piece {
             return true; // Capture move
         }
         return false; // Invalid move
+    }
+
+    @Override
+    public List<String> getLegalMoves(Piece[][] board) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getLegalMoves'");
+    }
+
+    @Override
+    public String getSymbol() {
+        return color == "white" ? "P" : "p";
     }
 }

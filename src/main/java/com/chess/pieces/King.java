@@ -1,5 +1,7 @@
 package com.chess.pieces;
 
+import java.util.List;
+
 public class King extends Piece {
     private int x;
     private int y;
@@ -22,5 +24,16 @@ public class King extends Piece {
         int deltaX = Math.abs(newX - this.getX());
         int deltaY = Math.abs(newY - this.getY());
         return (deltaX <= 1 && deltaY <= 1);
+    }
+
+    @Override
+    public List<String> getLegalMoves(Piece[][] board) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getLegalMoves'");
+    }
+
+    @Override
+    public String getSymbol() {
+        return color == "white" ? "K" : "k";
     }
 }

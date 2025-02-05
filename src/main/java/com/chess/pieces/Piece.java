@@ -1,5 +1,7 @@
 package com.chess.pieces;
 
+import java.util.List;
+
 public abstract class Piece {
     protected String color;
     protected int positionX;
@@ -28,10 +30,9 @@ public abstract class Piece {
         this.positionY = y;
     }
 
+    public abstract List<String> getLegalMoves(Piece[][] board);
+
     public abstract boolean isValidMove(int targetX, int targetY);
 
-    public String getSymbol() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getSymbol'");
-    }
+    public abstract String getSymbol();
 }
