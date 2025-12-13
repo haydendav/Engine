@@ -1,0 +1,5 @@
+com/chessbot/model/Piece.class
+com/chessbot/model/pieces/Bishop.class
+com/chessbot/model/Color.class
+com/chessbot/model/pieces/King.class
+com/chessbot/Main.class

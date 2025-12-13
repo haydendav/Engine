@@ -1,10 +1,4 @@
-public class King extends Piece {
-    public King(Color color, Position position) {
-        super(color, position);
-    }
+package com.chessbot.model.pieces;
 
-    @Override
-    public List<Move> getLegalMoves(Board board) {
-        
-    }
+public class King  {
 }

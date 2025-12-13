@@ -1,3 +1,8 @@
+package com.chessbot.model;
+
+import java.util.List;
+import com.chessbot.model.Color;
+
 public abstract class Piece {
     public String position;
     public Color color;
@@ -6,6 +11,4 @@ public abstract class Piece {
         this.color = color;
         this.position = position;
     }
-
-    public abstract List<Move> getLegalMoves(Board board);
 }
