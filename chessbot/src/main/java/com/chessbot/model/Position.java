@@ -9,10 +9,6 @@ public class Position {
         this.file = file;
     }
 
-    public boolean isValid() {
-        return rank >= 0 && rank < 8 && file >= 0 && file < 8;
-    }
-
     public int getRank() {
         return rank;
     }

@@ -11,7 +11,7 @@ public abstract class Piece {
         this.color = color;
     }
 
-    protected abstract String getType();
+    public abstract String getType();
 
     protected abstract int[][] getMoveOffsets();
 

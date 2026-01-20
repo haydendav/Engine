@@ -1,5 +1,7 @@
 package com.chessbot.model;
 
+import java.util.List;
+
 import com.chessbot.model.pieces.Bishop;
 import com.chessbot.model.pieces.King;
 import com.chessbot.model.pieces.Knight;
@@ -15,7 +17,7 @@ public class Board {
         setupInitalPosition();
     }
 
-    private void setupInitalPosition() {
+    public void setupInitalPosition() {
         //Place pawns
         for(int i=0; i<8; i++) {
             board[1][i] = new Pawn(Color.WHITE);
@@ -32,18 +34,14 @@ public class Board {
         board[0][6] = new Knight(Color.WHITE);
         board[0][7] = new Rook(Color.WHITE);
 
-        board[7][0] = new Rook(Color.WHITE);
-        board[7][1] = new Knight(Color.WHITE);
-        board[7][2] = new Bishop(Color.WHITE);
-        board[7][3] = new Queen(Color.WHITE);
-        board[7][4] = new King(Color.WHITE);
-        board[7][5] = new Bishop(Color.WHITE);
-        board[7][6] = new Knight(Color.WHITE);
-        board[7][7] = new Rook(Color.WHITE);
-    }
-
-    public Piece getPiece(int rank, int file) {
-        return board[rank][file];
+        board[7][0] = new Rook(Color.BLACK);
+        board[7][1] = new Knight(Color.BLACK);
+        board[7][2] = new Bishop(Color.BLACK);
+        board[7][3] = new Queen(Color.BLACK);
+        board[7][4] = new King(Color.BLACK);
+        board[7][5] = new Bishop(Color.BLACK);
+        board[7][6] = new Knight(Color.BLACK);
+        board[7][7] = new Rook(Color.BLACK);
     }
 
     public void movePiece(int fromRank, int fromFile, int toRank, int toFile) {
@@ -51,29 +49,101 @@ public class Board {
         board[fromRank][fromFile] = null;
     }
 
-    public Piece getPieceAt(Position to) {
-        return board[to.getRank()][to.getFile()];
-    }
-
-    public boolean isValidPosition(int newRank, int newFile) {
-        if(newRank >=0 && newRank <8 && newFile >=0 && newFile <8) {
-            return true;
+    public Piece getPieceAt(Position pos) {
+        return isValidPosition(pos.getRank(), pos.getFile())
+            ? board[pos.getRank()][pos.getFile()]
+            : null;
+    }   
+    
+    public void setPieceAt(Position pos, Piece piece) {
+        if (!isValidPosition(pos.getRank(), pos.getFile())) {
+            throw new IllegalArgumentException(
+                "Invalid position: " + pos.getRank() + "," + pos.getFile()
+            );
         }
-        return false;
-    }
+        board[pos.getRank()][pos.getFile()] = piece;
+    }    
+
+    public boolean isValidPosition(int rank, int file) {
+        return rank >= 0 && rank < 8 && file >= 0 && file < 8;
+    }    
 
     public boolean isEmpty(Position position) {
-        if(board[position.getRank()][position.getFile()] == null) {
-            return true;
+        return board[position.getRank()][position.getFile()] == null;
+    }
+    
+    public boolean isEnemy(Position position, Color color) {
+        Piece piece = board[position.getRank()][position.getFile()];
+        return piece != null && piece.getColor() != color;
+    }    
+
+    public Board copy() {
+        Board newBoard = new Board();
+        for(int rank=0; rank<8; rank++) {
+            System.arraycopy(this.board[rank], 0, newBoard.board[rank], 0, 8);
+        }
+        return newBoard;
+    }
+
+    public boolean isKingInCheck(Color color) {
+        Position kingPos = findKing(color);
+
+        Color enemy = color.opposite();
+
+        for (int rank = 0; rank < 8; rank++) {
+            for (int file = 0; file < 8; file++) {
+                Piece piece = board[rank][file];
+
+                if (piece != null && piece.getColor() == enemy) {
+                    Position from = new Position(rank, file);
+                    List<Position> attacks =
+                            piece.getPseudoLegalMoves(this, from);
+
+                    if (attacks.contains(kingPos)) {
+                        return true;
+                    }
+                }
+            }
         }
         return false;
     }
 
-    public boolean isEnemy(Position position, Color color) {
-        if(board[position.getRank()][position.getFile()] != null &&
-           board[position.getRank()][position.getFile()].getColor() != color) {
-            return true;
+    private Position findKing(Color color) {
+        for (int rank = 0; rank < 8; rank++) {
+            for (int file = 0; file < 8; file++) {
+                Piece piece = board[rank][file];
+                if (piece != null &&
+                    piece.getColor() == color &&
+                    piece.getType().equals("K")) {
+                    return new Position(rank, file);
+                }
+            }
         }
-        return false;
+        throw new IllegalStateException("King not found for " + color);
+    }
+
+    public void applyMove(Move move) {
+        Position from = move.from;
+        Position to = move.to;
+
+        Piece movingPiece = getPieceAt(from);
+
+        // move piece
+        setPieceAt(to, movingPiece);
+        setPieceAt(from, null);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (int rank = 7; rank >= 0; rank--) {
+            for (int file = 0; file < 8; file++) {
+                Piece p = board[rank][file];
+                sb.append(p == null ? "." : p.getType());
+                sb.append(" ");
+            }
+            sb.append("\n");
+        }
+        return sb.toString();
     }
 }

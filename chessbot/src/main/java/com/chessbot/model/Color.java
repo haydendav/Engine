@@ -1,5 +1,9 @@
 package com.chessbot.model;
 
 public enum Color {
-    BLACK, WHITE
+    BLACK, WHITE;
+
+    public Color opposite() {
+        return this == WHITE ? BLACK : WHITE;
+    }
 }
