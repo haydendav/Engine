@@ -53,7 +53,8 @@ public class Pawn extends Piece {
 
     @Override
     protected int[][] getMoveOffsets() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getMoveOffsets'");
+        // Pawn moves are handled in getPseudoLegalMoves() due to special rules
+        // (forward movement, captures, en passant, promotion)
+        return new int[0][];
     }
 }
